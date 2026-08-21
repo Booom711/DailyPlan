@@ -48,6 +48,10 @@ def send_pushplus(token, title, markdown):
     with urllib.request.urlopen(request, timeout=30) as response:
         result = json.loads(response.read().decode("utf-8"))
     if result.get("code") != 200:
+        if result.get("code") == 905:
+            raise SystemExit(
+                "PushPlus 账户未实名认证，请先访问 https://verify.pushplus.plus 完成认证后再推送。"
+            )
         raise SystemExit(f"PushPlus 推送失败：{result}")
 
 

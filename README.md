@@ -9,6 +9,8 @@
 - PushPlus：到 [pushplus.plus](https://www.pushplus.plus) 登录，复制你的 token。
 - Server酱：到 [sct.ftqq.com](https://sct.ftqq.com) 登录，复制 SendKey。
 
+使用 PushPlus 时，账户需要先完成实名认证，否则会提示 `账户未进行实名认证`。
+
 ## 使用方法
 
 1. 把整个 `fitness-push` 目录上传到一个 GitHub 仓库。
