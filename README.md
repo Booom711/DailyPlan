@@ -4,22 +4,23 @@
 
 ## 免费准备
 
-二选一：
+推荐 Server酱：到 [sct.ftqq.com](https://sct.ftqq.com) 登录，复制 SendKey。免费版每天 5 条，够每天推送 1 次，不需要实名认证和付费。
 
-- PushPlus：到 [pushplus.plus](https://www.pushplus.plus) 登录，复制你的 token。
-- Server酱：到 [sct.ftqq.com](https://sct.ftqq.com) 登录，复制 SendKey。
+其他可选通道：
 
-使用 PushPlus 时，账户需要先完成实名认证，否则会提示 `账户未进行实名认证`。
+- WxPusher：到 [wxpusher.zjiecode.com](https://wxpusher.zjiecode.com/docs/spt.html) 扫码获取 SPT，免费且不需要实名认证。
+- PushPlus：到 [pushplus.plus](https://www.pushplus.plus) 获取 token，但账户需要先完成实名认证，否则会提示 `账户未进行实名认证`。
 
 ## 使用方法
 
 1. 把整个 `fitness-push` 目录上传到一个 GitHub 仓库。
 2. 在仓库 `Settings` -> `Secrets and variables` -> `Actions` 中新增 Secret：
-   - 用 PushPlus：变量名 `PUSHPLUS_TOKEN`，值填你的 token。
    - 用 Server酱：变量名 `SERVERCHAN_SENDKEY`，值填你的 SendKey。
-   - 如果改用 Server酱，再新增 Variable：变量名 `PUSH_PROVIDER`，值填 `serverchan`。
-3. 进入仓库 `Actions` 页面，找到 `Daily Fitness Push`，点 `Run workflow` 测试一次。
-4. 以后每天 07:00 会自动执行，也可以在 `Actions` 页面手动重新运行。
+   - 用 WxPusher：变量名 `WXPUSHER_SPT`，值填你的 SPT。
+   - 用 PushPlus：变量名 `PUSHPLUS_TOKEN`，值填你的 token。
+3. 同时配置了多个通道时，默认优先使用 Server酱；想指定通道，可新增 Variable `PUSH_PROVIDER`，值填 `serverchan`、`wxpusher` 或 `pushplus`。
+4. 进入仓库 `Actions` 页面，找到 `Daily Fitness Push`，点 `Run workflow` 测试一次。
+5. 以后每天 07:00 会自动执行，也可以在 `Actions` 页面手动重新运行。
 
 ## 修改计划
 

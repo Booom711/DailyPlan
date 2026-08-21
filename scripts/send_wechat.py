@@ -70,6 +70,25 @@ def send_serverchan(sendkey, title, markdown):
         raise SystemExit(f"Server酱推送失败：{result}")
 
 
+def send_wxpusher(spt, title, markdown):
+    payload = {
+        "content": markdown,
+        "summary": title,
+        "contentType": 3,
+        "spt": spt,
+    }
+    request = urllib.request.Request(
+        "https://wxpusher.zjiecode.com/api/send/message/simple-push",
+        data=json.dumps(payload, ensure_ascii=False).encode("utf-8"),
+        headers={"Content-Type": "application/json"},
+        method="POST",
+    )
+    with urllib.request.urlopen(request, timeout=30) as response:
+        result = json.loads(response.read().decode("utf-8"))
+    if result.get("code") != 1000:
+        raise SystemExit(f"WxPusher 推送失败：{result}")
+
+
 def main():
     dry_run = "--dry-run" in sys.argv
     target_date = datetime.now(CHINA_TZ)
@@ -88,7 +107,19 @@ def main():
         print(markdown)
         return
 
-    provider = os.environ.get("PUSH_PROVIDER", "pushplus").strip().lower()
+    provider = os.environ.get("PUSH_PROVIDER", "auto").strip().lower()
+    if provider == "auto":
+        if os.environ.get("SERVERCHAN_SENDKEY", "").strip():
+            provider = "serverchan"
+        elif os.environ.get("WXPUSHER_SPT", "").strip():
+            provider = "wxpusher"
+        elif os.environ.get("PUSHPLUS_TOKEN", "").strip():
+            provider = "pushplus"
+        else:
+            raise SystemExit(
+                "未检测到推送 token，请配置 SERVERCHAN_SENDKEY、WXPUSHER_SPT 或 PUSHPLUS_TOKEN。"
+            )
+
     if provider == "pushplus":
         token = os.environ.get("PUSHPLUS_TOKEN", "").strip()
         if not token:
@@ -99,6 +130,11 @@ def main():
         if not sendkey:
             raise SystemExit("缺少 SERVERCHAN_SENDKEY，请在 GitHub Actions secrets 中配置。")
         send_serverchan(sendkey, title, markdown)
+    elif provider == "wxpusher":
+        spt = os.environ.get("WXPUSHER_SPT", "").strip()
+        if not spt:
+            raise SystemExit("缺少 WXPUSHER_SPT，请在 GitHub Actions secrets 中配置。")
+        send_wxpusher(spt, title, markdown)
     else:
         raise SystemExit(f"不支持的 PUSH_PROVIDER：{provider}")
 
