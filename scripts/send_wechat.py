@@ -91,8 +91,25 @@ def send_wxpusher(spt, title, markdown):
 
 def main():
     dry_run = "--dry-run" in sys.argv
+    digest_file = None
     target_date = datetime.now(CHINA_TZ)
-    for arg in sys.argv[1:]:
+    args = sys.argv[1:]
+    index = 0
+    while index < len(args):
+        arg = args[index]
+        if arg == "--digest-file":
+            index += 1
+            digest_file = args[index]
+        elif arg.startswith("--digest-file="):
+            digest_file = arg.split("=", 1)[1]
+        elif arg == "--dry-run":
+            pass
+        else:
+            index += 1
+            continue
+        index += 1
+
+    for arg in args:
         if arg.startswith("--date="):
             target_date = datetime.strptime(arg.split("=", 1)[1], "%Y-%m-%d").replace(
                 tzinfo=CHINA_TZ
@@ -101,6 +118,14 @@ def main():
     data = load_plan()
     day = data["days"][target_date.weekday()]
     title, markdown = render_plan(data, day, target_date)
+
+    if digest_file:
+        digest_path = Path(digest_file)
+        if digest_path.exists():
+            digest_md = digest_path.read_text(encoding="utf-8").strip()
+            if digest_md:
+                title = f"{target_date.year}-{target_date.month:02d}-{target_date.day:02d} {day['weekday']} | 健身计划 + AI 速报"
+                markdown = digest_md + "\n\n---\n\n" + markdown
 
     if dry_run:
         print(title)
