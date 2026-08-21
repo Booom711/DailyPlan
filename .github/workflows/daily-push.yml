@@ -32,6 +32,13 @@ jobs:
         continue-on-error: true
         run: python3 scripts/build_digest.py --input raw-digest.json --output ai_digest.md
 
+      - name: Generate Chinese refined digest with DeepSeek
+        continue-on-error: true
+        env:
+          DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+          DEEPSEEK_MODEL: deepseek-v4-flash
+        run: python3 scripts/remix_chinese.py --input ai_digest.md --output ai_digest.md
+
       - name: Push today's plan to WeChat
         env:
           PUSH_PROVIDER: ${{ vars.PUSH_PROVIDER || 'auto' }}

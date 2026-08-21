@@ -32,6 +32,8 @@ AI 速报来自 follow-builders 的公开 feed，每天推送最近 24-72 小时
 
 想调整推文、博客、播客数量，修改 `scripts/build_digest.py` 里的 `--tweet-limit`、`--blog-limit`、`--podcast-limit` 参数即可。
 
+想启用 DeepSeek 中文精编版：到 [platform.deepseek.com](https://platform.deepseek.com) 创建 API Key，在 GitHub 仓库添加 Secret `DEEPSEEK_API_KEY`。配置后每天会用 DeepSeek 把速报改写成中文精编版；不配置则自动发送结构化版。
+
 ## 调整推送时间
 
 编辑 `.github/workflows/daily-push.yml` 里的 `cron`：
