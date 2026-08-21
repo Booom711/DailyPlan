@@ -5,13 +5,13 @@ param(
 
 Set-Location $PSScriptRoot
 
-Write-Host "1/3 推送代码到 GitHub..."
+Write-Host "1/3 Pushing code to GitHub..."
 git push -u origin main
 
-Write-Host "2/3 配置 Server酱 SendKey..."
+Write-Host "2/3 Setting ServerChan SendKey..."
 gh secret set SERVERCHAN_SENDKEY --repo Booom711/DailyPlan --body $SendKey
 
-Write-Host "3/3 触发一次测试推送..."
+Write-Host "3/3 Triggering a test push..."
 gh workflow run "Daily Fitness Push" --repo Booom711/DailyPlan
 
-Write-Host "完成。可以到 Actions 页面查看测试结果。"
+Write-Host "Done. Check the Actions page for the test run."
