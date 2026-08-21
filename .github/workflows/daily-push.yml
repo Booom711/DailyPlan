@@ -1,0 +1,23 @@
+name: Daily Fitness Push
+
+on:
+  schedule:
+    # 每天 07:00 北京时间（UTC 23:00）
+    - cron: "0 23 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  push:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Push today's plan to WeChat
+        env:
+          PUSH_PROVIDER: ${{ vars.PUSH_PROVIDER || 'pushplus' }}
+          PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
+          SERVERCHAN_SENDKEY: ${{ secrets.SERVERCHAN_SENDKEY }}
+        run: python3 scripts/send_wechat.py
