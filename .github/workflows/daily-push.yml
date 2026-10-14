@@ -1,9 +1,7 @@
 name: Daily Fitness Push
 
 on:
-  schedule:
-    # 每天 08:30 北京时间（UTC 00:30）
-    - cron: "30 0 * * *"
+  # Daily automatic delivery stopped at the owner's request.
   workflow_dispatch:
 
 permissions:
@@ -11,6 +9,8 @@ permissions:
 
 jobs:
   push:
+    # Keep delivery paused even if manually dispatched.
+    if: ${{ false }}
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
